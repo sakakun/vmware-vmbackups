@@ -2,13 +2,6 @@ param(
     [switch]$BackupAll
     )
 
-Get-Module -ListAvailable PowerCLI* | Import-Module
-Set-PowerCLIConfiguration -InvalidCertificateAction Ignore -confirm:$False
-
-# Do not use this line with user name and password in production enviroments.
-# By Removing the User and Password variables the script will prompt for cred.
-Connect-VIServer -Server "0.0.0.0" -User "user@domain.local" -Password "SomeP@ssw0rd" -Force
-
 #
 # Script Variables
 #
@@ -17,6 +10,16 @@ $Backup_Datastore = Get-Datastore -Name "HomeNAS-Cache";            # Datastore 
 $Backup_Location = Get-Folder -Name "Backup Machines";              # Location in vCenter to store VM topologically
 $backupDatabase = @();                                              # Backup Database
 $CloneDate = Get-Date -Format "yyyyMMdd-hhmmss";                    # Timestamp for comments and names of backups
+
+#
+# Import and Set Certification Actions
+#
+Get-Module -ListAvailable PowerCLI* | Import-Module
+Set-PowerCLIConfiguration -InvalidCertificateAction Ignore -confirm:$False
+
+# Do not use this line with user name and password in production enviroments.
+# By Removing the User and Password variables the script will prompt for cred.
+Connect-VIServer -Server "0.0.0.0" -User "user@domain.local" -Password "SomeP@ssw0rd" -Force
 
 #
 # Backup Process
